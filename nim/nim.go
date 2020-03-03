@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strconv"
 	"strings"
 )
 
@@ -18,8 +21,29 @@ type GameState struct {
 }
 
 func main() {
-	piles := 4
-	matches := 5
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Print("How many piles do you want your game to have?\n")
+	userInputPiles, _ := reader.ReadString('\n')
+
+	userInputPiles = strings.Replace(userInputPiles, "\n", "", -1)
+
+	piles, err := strconv.Atoi(userInputPiles)
+
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Print("How many matches do you want each pile to have?\n")
+	userInputMatches, _ := reader.ReadString('\n')
+
+	userInputMatches = strings.Replace(userInputMatches, "\n", "", -1)
+
+	matches, err := strconv.Atoi(userInputMatches)
+
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println(NewGameState(piles, matches))
 }
