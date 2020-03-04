@@ -23,15 +23,22 @@ func main() {
 	matches := AskPlayerForInt("How many matches do you want each pile to have?", reader)
 
 	gameState := NewGameState(piles, matches)
-	fmt.Println()
+
+	playerCounter := 0
 
 	for !gameState.gameover {
 		gameState.printBoard()
 
+		fmt.Printf("Player %d it is your turn\n", playerCounter+1)
 		gameState.playMove(reader)
 
-		gameState.checkForGameover()
+		gameState.gameover = gameState.isGameover()
+
+		playerCounter = (playerCounter + 1) % 2
 	}
+
+	gameState.printBoard()
+	fmt.Printf("Player %d you have lost! There is only 1 match left\n", playerCounter+1)
 }
 
 func (gameState *GameState) playMove(reader *bufio.Reader) {
@@ -44,13 +51,17 @@ func (gameState *GameState) playMove(reader *bufio.Reader) {
 
 	matches := AskPlayerForInt("How many matches would you like to remove?", reader)
 
-	matchesToRemove := len(gameState.gameBoard[pile-1]) - matches
+	matchesLeftover := len(gameState.gameBoard[pile-1]) - matches
 
-	if matchesToRemove < 0 {
+	if matchesLeftover < 0 {
 		panic(errors.New("Number of matches to remove is larger than the pile"))
 	}
 
-	gameState.gameBoard[pile-1] = strings.Repeat("|", matchesToRemove)
+	if matches == gameState.getNumberOfMatchesRemaining() {
+		panic(errors.New("Player cannot remove the final match"))
+	}
+
+	gameState.gameBoard[pile-1] = strings.Repeat("|", matchesLeftover)
 }
 
 func (gameState *GameState) printBoard() {
@@ -64,16 +75,17 @@ func (gameState *GameState) printBoard() {
 	fmt.Println()
 }
 
-func (gameState *GameState) checkForGameover() {
+func (gameState *GameState) isGameover() bool {
+	return 1 == gameState.getNumberOfMatchesRemaining()
+}
+
+func (gameState *GameState) getNumberOfMatchesRemaining() int {
 	matchesRemaining := 0
 
 	for i := range gameState.gameBoard {
 		matchesRemaining = matchesRemaining + len(gameState.gameBoard[i])
 	}
-
-	if matchesRemaining == 1 {
-		gameState.gameover = true
-	}
+	return matchesRemaining
 }
 
 // NewGameState creates a new game state with a number of piles
@@ -105,6 +117,8 @@ func AskPlayerForInt(question string, reader *bufio.Reader) int {
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println()
 
 	return userInputAsInteger
 }
