@@ -18,7 +18,7 @@ func (c ComputerPlayer) PlayMove(gameState *board.GameState, reader *bufio.Reade
 	if gameState.Gameover {
 		panic("Does Not Compute")
 	}
-	fmt.Println("Attempting To find Optimal move\n")
+	fmt.Println("Attempting To find Optimal move")
 
 	pile, matchesToTake := calculateOptimalMove(gameState)
 
