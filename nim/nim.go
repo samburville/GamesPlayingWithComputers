@@ -27,7 +27,9 @@ func main() {
 		panic(err)
 	}
 
-	humanPlayer := player.HumanPlayer{}
+	player1 := player.HumanPlayer{}
+
+	player2 := player.ComputerPlayer{}
 
 	gameState := board.NewGameState(piles, matches)
 
@@ -38,10 +40,18 @@ func main() {
 
 		fmt.Printf("Player %d it is your turn\n", playerCounter+1)
 
-		for !humanPlayer.PlayMove(gameState, reader) {
+		for !player1.PlayMove(gameState, reader) {
 		}
 
 		gameState.Gameover = gameState.IsGameover()
+
+		if !gameState.Gameover {
+			playerCounter = (playerCounter + 1) % 2
+
+			fmt.Printf("Player %d it is your turn\n", playerCounter+1)
+
+			player2.PlayMove(gameState, reader)
+		}
 
 		playerCounter = (playerCounter + 1) % 2
 	}
