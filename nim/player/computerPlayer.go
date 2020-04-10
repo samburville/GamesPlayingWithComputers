@@ -18,11 +18,10 @@ func (c ComputerPlayer) PlayMove(gameState *board.GameState, reader *bufio.Reade
 	if gameState.Gameover {
 		panic("Does Not Compute")
 	}
-	fmt.Println("Attempting To find Optimal move")
 
 	pile, matchesToTake := calculateOptimalMove(gameState)
 
-	fmt.Printf("Optimal Move, remove from %d matches from pile %d\n", matchesToTake, pile)
+	fmt.Printf("Computer removes from %d matches from pile %d\n", matchesToTake, pile)
 
 	matchesLeftover := len(gameState.GameBoard[pile-1]) - matchesToTake
 
@@ -42,8 +41,6 @@ func calculateOptimalMove(gameState *board.GameState) (int, int) {
 
 	nimSum := calculateNimSum(pileLengthBoard)
 
-	fmt.Printf("Nim Sum %d\n", nimSum)
-
 	if nimSum == 0 {
 
 		for i := 0; i < gameBoardLength; i++ {
@@ -57,9 +54,10 @@ func calculateOptimalMove(gameState *board.GameState) (int, int) {
 
 	for i := 0; i < gameBoardLength; i++ {
 
-		if (pileLengthBoard[i] ^ nimSum) < pileLengthBoard[i] {
+		targetSize := pileLengthBoard[i] ^ nimSum
+		if (targetSize) < pileLengthBoard[i] {
 
-			return i + 1, pileLengthBoard[i] - (pileLengthBoard[i] ^ nimSum)
+			return i + 1, pileLengthBoard[i] - (targetSize)
 		}
 	}
 
