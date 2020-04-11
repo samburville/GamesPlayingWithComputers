@@ -30,8 +30,6 @@ func NewGameState(piles, matches int) *GameState {
 
 // PrintBoard prints the current state of the game
 func (gameState *GameState) PrintBoard() {
-	fmt.Println("Current Game Board")
-	fmt.Println()
 
 	for i := range gameState.GameBoard {
 		fmt.Println(gameState.GameBoard[i])
@@ -42,7 +40,7 @@ func (gameState *GameState) PrintBoard() {
 
 // IsGameover checks for gameover based on the number of matches remaining
 func (gameState *GameState) IsGameover() bool {
-	return 1 == gameState.GetNumberOfMatchesRemaining()
+	return 0 == gameState.GetNumberOfMatchesRemaining()
 }
 
 // GetNumberOfMatchesRemaining returns the number of matches left in the
@@ -52,5 +50,6 @@ func (gameState *GameState) GetNumberOfMatchesRemaining() int {
 	for i := range gameState.GameBoard {
 		matchesRemaining = matchesRemaining + len(gameState.GameBoard[i])
 	}
+
 	return matchesRemaining
 }

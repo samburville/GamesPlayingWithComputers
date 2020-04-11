@@ -44,12 +44,6 @@ func (h HumanPlayer) PlayMove(gameState *board.GameState, reader *bufio.Reader) 
 		return false
 	}
 
-	if matches == gameState.GetNumberOfMatchesRemaining() {
-		fmt.Println("Player cannot remove the final match. Try Again")
-		fmt.Println()
-		return false
-	}
-
 	gameState.GameBoard[pile-1] = strings.Repeat("|", matchesLeftover)
 	return true
 }

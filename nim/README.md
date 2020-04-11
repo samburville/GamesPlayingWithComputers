@@ -11,4 +11,4 @@ The game starts with N piles of M matches.
 
 Each player takes turns taking any number of matches from a single pile
 
-The player left with a pile containing a single match loses the game.
+The player who takes the final match wins the game
