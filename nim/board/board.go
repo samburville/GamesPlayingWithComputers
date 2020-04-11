@@ -53,11 +53,11 @@ func (gameState *GameState) PrintBoard() {
 
 // IsGameover checks for gameover based on the number of matches remaining
 func (gameState *GameState) IsGameover() bool {
-	return 0 == gameState.GetNumberOfMatchesRemaining()
+	return 0 == gameState.getNumberOfMatchesRemaining()
 }
 
-// GetNumberOfMatchesRemaining returns the number of matches left in the
-func (gameState *GameState) GetNumberOfMatchesRemaining() int {
+// getNumberOfMatchesRemaining returns the number of matches left in the board
+func (gameState *GameState) getNumberOfMatchesRemaining() int {
 	matchesRemaining := 0
 
 	for i := range gameState.gameBoard {
