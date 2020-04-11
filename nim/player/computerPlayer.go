@@ -3,7 +3,6 @@ package player
 import (
 	"bufio"
 	"fmt"
-	"strings"
 
 	"github.com/samburville/GamesPlayingWithComputers/nim/board"
 )
@@ -15,7 +14,7 @@ type ComputerPlayer struct {
 // PlayMove plays a computer players move and returns true if successful
 func (c ComputerPlayer) PlayMove(gameState *board.GameState, reader *bufio.Reader) bool {
 
-	if gameState.Gameover {
+	if gameState.IsGameover() {
 		panic("Does Not Compute")
 	}
 
@@ -23,52 +22,44 @@ func (c ComputerPlayer) PlayMove(gameState *board.GameState, reader *bufio.Reade
 
 	fmt.Printf("Computer removes from %d matches from pile %d\n", matchesToTake, pile)
 
-	matchesLeftover := len(gameState.GameBoard[pile-1]) - matchesToTake
-
-	gameState.GameBoard[pile-1] = strings.Repeat("|", matchesLeftover)
+	gameState.PlayMove(pile, matchesToTake)
 
 	return true
 }
 
 func calculateOptimalMove(gameState *board.GameState) (int, int) {
-	gameBoardLength := len(gameState.GameBoard)
 
-	pileLengthBoard := make([]int, gameBoardLength)
+	gameBoard := gameState.GetGameBoard()
 
-	for i := 0; i < gameBoardLength; i++ {
-		pileLengthBoard[i] = len(gameState.GameBoard[i])
-	}
-
-	nimSum := calculateNimSum(pileLengthBoard)
+	nimSum := calculateNimSum(gameBoard)
 
 	if nimSum == 0 {
 
-		for i := 0; i < gameBoardLength; i++ {
-
-			if pileLengthBoard[i] > 0 {
+		for i := range gameBoard {
+			if gameBoard[i] > 0 {
 
 				return i + 1, 1
 			}
 		}
 	}
 
-	for i := 0; i < gameBoardLength; i++ {
+	for i := range gameBoard {
+		targetSize := gameBoard[i] ^ nimSum
 
-		targetSize := pileLengthBoard[i] ^ nimSum
-		if (targetSize) < pileLengthBoard[i] {
+		if (targetSize) < gameBoard[i] {
 
-			return i + 1, pileLengthBoard[i] - (targetSize)
+			return i + 1, gameBoard[i] - (targetSize)
 		}
 	}
 
 	panic("This shouldn't happen")
 }
 
-func calculateNimSum(pileLengthBoard []int) int {
+func calculateNimSum(gameBoard []int) int {
 	nimSum := 0
 
-	for i := 0; i < len(pileLengthBoard); i++ {
-		nimSum = nimSum ^ pileLengthBoard[i]
+	for i := 0; i < len(gameBoard); i++ {
+		nimSum = nimSum ^ gameBoard[i]
 	}
 
 	return nimSum

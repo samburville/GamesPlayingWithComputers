@@ -3,7 +3,6 @@ package player
 import (
 	"bufio"
 	"fmt"
-	"strings"
 
 	"github.com/samburville/GamesPlayingWithComputers/nim/board"
 	"github.com/samburville/GamesPlayingWithComputers/nim/consolehelper"
@@ -23,12 +22,6 @@ func (h HumanPlayer) PlayMove(gameState *board.GameState, reader *bufio.Reader) 
 		return false
 	}
 
-	if pile > len(gameState.GameBoard) {
-		fmt.Println("Pile is out of range of the game board. Try Again")
-		fmt.Println()
-		return false
-	}
-
 	matches, err := consolehelper.AskPlayerForInt("How many matches would you like to remove?", reader)
 
 	if err != nil {
@@ -36,14 +29,12 @@ func (h HumanPlayer) PlayMove(gameState *board.GameState, reader *bufio.Reader) 
 		return false
 	}
 
-	matchesLeftover := len(gameState.GameBoard[pile-1]) - matches
+	success := gameState.PlayMove(pile, matches)
 
-	if matchesLeftover < 0 {
-		fmt.Println("Number of matches to remove is larger than the pile. Try Again")
-		fmt.Println()
+	if !success {
+		fmt.Printf("%d matches from pile %d is an invalid move.\n", matches, pile)
 		return false
 	}
 
-	gameState.GameBoard[pile-1] = strings.Repeat("|", matchesLeftover)
 	return true
 }

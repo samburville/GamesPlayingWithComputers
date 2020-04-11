@@ -35,7 +35,7 @@ func main() {
 
 	playerCounter := 1
 
-	for !gameState.Gameover {
+	for !gameState.IsGameover() {
 		playerCounter = (playerCounter + 1) % 2
 
 		gameState.PrintBoard()
@@ -44,18 +44,16 @@ func main() {
 		for !player1.PlayMove(gameState, reader) {
 		}
 
-		gameState.Gameover = gameState.IsGameover()
-
-		if !gameState.Gameover {
-			playerCounter = (playerCounter + 1) % 2
-
-			gameState.PrintBoard()
-			fmt.Printf("Player %d it is your turn\n", playerCounter+1)
-
-			player2.PlayMove(gameState, reader)
+		if gameState.IsGameover() {
+			break
 		}
 
-		gameState.Gameover = gameState.IsGameover()
+		playerCounter = (playerCounter + 1) % 2
+
+		gameState.PrintBoard()
+		fmt.Printf("Player %d it is your turn\n", playerCounter+1)
+
+		player2.PlayMove(gameState, reader)
 	}
 
 	fmt.Printf("Player %d you have won! You took the last match!\n", playerCounter+1)
