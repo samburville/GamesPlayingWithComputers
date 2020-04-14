@@ -3,7 +3,7 @@
 ## About
 This is a simple implementation of Nim written in Golang.
 
-To play run go run nim.go, or run nim.exe and follow the commands
+To play run go run nim.go and follow the commands
 
 ## Nim Rules
 
